@@ -1,0 +1,11 @@
+name: My Workflow
+on: [push]
+
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run Komac
+      uses: michidk/run-komac
+      with:
+        args: '--version'
