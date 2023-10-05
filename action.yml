@@ -15,6 +15,18 @@ inputs:
   args:
     description: 'The args to run Komac with'
     required: true
+  custom-fork-owner:
+    description: 'Custom fork owner'
+    required: false
+  custom-tool:
+    description: 'Custom tool'
+    required: false
+  custom-tool-url:
+    description: 'Custom tool URL'
+    required: false
+  reuse-draft-pr:
+    description: 'Reuse draft PR'
+    required: false
 
 runs:
   using: 'composite'
@@ -54,6 +66,14 @@ runs:
       if: env.komac_installed == 'false'
       shell: bash
       run: wget https://github.com/russellbanks/Komac/releases/download/v${{ inputs.komac-version }}/Komac-${{ inputs.komac-version }}-all.jar -O komac.jar
+
+    - name: Set Custom Environment Variables
+      shell: bash
+      run: |
+        echo "KMC_FRK_OWNER=${{ inputs.custom-fork-owner }}" >> $GITHUB_ENV
+        echo "KMC_CRTD_WITH=${{ inputs.custom-tool }}" >> $GITHUB_ENV
+        echo "KMC_CRTD_WITH_URL=${{ inputs.custom-tool-url }}" >> $GITHUB_ENV
+        echo "KMC_FORCE_PUSH_PR=${{ inputs.reuse-draft-pr }}" >> $GITHUB_ENV
 
     - name: Run Komac
       shell: bash

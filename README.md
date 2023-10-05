@@ -7,6 +7,9 @@
 
 This GitHub Action sets up Java, installs Komac, and then runs a user-specified command with Komac. It's designed to be efficient by checking if Java and Komac are already installed before attempting to install them.
 
+This action is used in the [winget-updater][winget-updater] GitHub action to automatically update WinGet packages.
+
+
 ## 📖 Example Usage
 
 ```yaml
@@ -31,10 +34,19 @@ jobs:
 - `komac-version`: Specifies which version of Komac to use.
   - **Required**: ❌
   - **Default**: `1.11.0`
-- `command`: The command to run with Komac.
+- `args`: The command to run with Komac.
   - **Required**: ✅
+- `custom-fork-owner`: Custom fork owner.
+  - **Required**: ❌
+- `custom-tool`: Custom tool.
+  - **Required**: ❌
+- `custom-tool-url`: Custom tool URL.
+  - **Required**: ❌
+- `reuse-draft-pr`: Reuse draft PR.
+  - **Required**: ❌
 
 [github-issues-badge]: https://img.shields.io/github/issues/michidk/run-komac?logo=target
 [github-release-badge]: https://img.shields.io/github/v/release/michidk/run-komac?logo=github
 [github-repo-stars-badge]: https://img.shields.io/github/stars/michidk/run-komac?logo=githubsponsors
 [github-license-badge]: https://img.shields.io/github/license/michidk/run-komac?logo=gnu
+[winget-updater]: https://github.com/michidk/winget-updater/
