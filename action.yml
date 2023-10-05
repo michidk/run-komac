@@ -1,0 +1,60 @@
+name: 'Run Komac'
+description: 'Sets up Java and runs Komac'
+branding:
+  color: 'blue'
+  icon: 'upload-cloud'
+inputs:
+  komac-version:
+    description: 'Which Komac version to use'
+    required: false
+    default: '1.11.0'
+  args:
+    description: 'The args to run Komac with'
+    required: true
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '17'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check if correct Java version is installed
+      id: check-java
+      shell: bash
+      run: |
+        if java -version 2>&1 | grep -q "${{ inputs.java-version }}"; then
+          echo "Java ${{ inputs.java-version }} is already installed"
+          echo "java_installed=true" >> $GITHUB_ENV
+        else
+          echo "Java ${{ inputs.java-version }} is not installed"
+          echo "java_installed=false" >> $GITHUB_ENV
+        fi
+
+    - name: Setup Java
+      if: env.java_installed == 'false'
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: ${{ inputs.java-version }}
+
+    - name: Check if Komac is installed
+      id: check-komac
+      shell: bash
+      run: |
+        if [ -f "komac.jar" ]; then
+          echo "Komac is already installed"
+          echo "komac_installed=true" >> $GITHUB_ENV
+        else
+          echo "Komac is not installed"
+          echo "komac_installed=false" >> $GITHUB_ENV
+        fi
+
+    - name: Install Komac
+      if: env.komac_installed == 'false'
+      shell: bash
+      run: wget https://github.com/russellbanks/Komac/releases/download/v${{ inputs.komac-version }}/Komac-${{ inputs.komac-version }}-all.jar -O komac.jar
+
+    - name: Run Komac
+      shell: bash
+      run: java -jar komac.jar ${{ inputs.args }}
