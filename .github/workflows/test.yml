@@ -10,6 +10,6 @@ jobs:
       run: echo "::set-output name=sha::$(git rev-parse HEAD)"
     - run: echo "Latest commit hash is ${{ steps.latest_sha.outputs.sha }}"
     - name: Run Komac
-      uses: michidk/run-komac@c7469ea7766185882191aa4edf23f1e6d81d8480
+      uses: michidk/run-komac@2007915c9ec851290e3301f3ea465b882b19ffa4
       with:
         args: '--version'
