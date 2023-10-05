@@ -3,13 +3,10 @@ on: [push]
 
 jobs:
   test:
+    name: Print Komac Version
     runs-on: ubuntu-latest
     steps:
-    - name: Get latest commit hash
-      id: latest_sha
-      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
-    - run: echo "Latest commit hash is ${{ steps.latest_sha.outputs.sha }}"
     - name: Run Komac
-      uses: michidk/run-komac@c7469ea7766185882191aa4edf23f1e6d81d8480
+      uses: ./
       with:
         args: '--version'
