@@ -12,17 +12,12 @@ inputs:
     description: 'The args to run Komac with.'
     required: true
 
-
-defaults:
-  run:
-    shell: bash
-
-
 runs:
   using: 'composite'
   steps:
     - name: Check if Java is installed
       id: check-java
+      shell: bash
       run: |
         if java -version 2>&1 | grep -q "version"; then
           echo "Java is already installed"
@@ -41,6 +36,7 @@ runs:
 
     - name: Check if Komac is installed
       id: check-komac
+      shell: bash
       run: |
         if [ -f "komac.jar" ]; then
           echo "Komac is already installed"
@@ -52,7 +48,9 @@ runs:
 
     - name: Install Komac
       if: env.komac_installed == 'false'
+      shell: bash
       run: wget https://github.com/russellbanks/Komac/releases/download/v${{ inputs.komac-version }}/Komac-${{ inputs.komac-version }}-all.jar -O komac.jar
 
     - name: Run Komac
+      shell: bash
       run: java -jar komac.jar ${{ inputs.args }}
