@@ -1,11 +1,14 @@
-name: My Workflow
+name: Test Action
 on: [push]
 
 jobs:
-  my_job:
+  test:
     runs-on: ubuntu-latest
     steps:
+    - name: Get latest commit hash
+      id: latest_sha
+      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
     - name: Run Komac
-      uses: michidk/run-komac@${{ env.GITHUB_SHA }}
+      uses: michidk/run-komac@${{ steps.latest_sha.outputs.sha }}
       with:
         args: '--version'
