@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run Komac
-      uses: michidk/run-komac@v1
+      uses: michidk/run-komac@v1.0.0
       with:
         args: '--version'
 ```
