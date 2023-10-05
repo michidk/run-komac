@@ -25,16 +25,14 @@ jobs:
 
 ## ⚒️ Configuration Options
 
-- `komac-version`: Specifies which version of Komac to use.
-  - **Required**: ❌
-  - **Default**: `1.11.0`
-
-- `command`: The command to run with Komac.
-  - **Required**: ✅
-
 - `java-version`: Specifies which version of Java to use.
   - **Required**: ❌
   - **Default**: `17`
+- `komac-version`: Specifies which version of Komac to use.
+  - **Required**: ❌
+  - **Default**: `1.11.0`
+- `command`: The command to run with Komac.
+  - **Required**: ✅
 
 [github-issues-badge]: https://img.shields.io/github/issues/michidk/run-komac?logo=target
 [github-release-badge]: https://img.shields.io/github/v/release/michidk/run-komac?logo=github

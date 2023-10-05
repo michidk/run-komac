@@ -4,6 +4,10 @@ branding:
   color: 'blue'
   icon: 'upload-cloud'
 inputs:
+  java-version:
+    description: 'Java version to use'
+    required: false
+    default: '17'
   komac-version:
     description: 'Which Komac version to use'
     required: false
@@ -11,10 +15,6 @@ inputs:
   args:
     description: 'The args to run Komac with'
     required: true
-  java-version:
-    description: 'Java version to use'
-    required: false
-    default: '17'
 
 runs:
   using: 'composite'
