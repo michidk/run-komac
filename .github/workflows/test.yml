@@ -6,6 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run Komac
-      uses: michidk/run-komac
+      uses: michidk/run-komac@${{ env.GITHUB_SHA }}
       with:
         args: '--version'
