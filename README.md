@@ -1,4 +1,4 @@
-<h1> <img src="https://github.com/michidk/run-komac/blob/main/.github/images/github-actions-logo.png" width="32" height="32" alt="Logo" /> Run Komac (GitHub Action) <a href="https://github.com/russellbanks/Komac"> <img src="https://github.com/michidk/run-komac/blob/main/.github/images/komac-logo.svg" height="24px" style="vertical-align:bottom" alt="Komac logo" /> </a></h1>
+<h1> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/github-actions-logo.png" width="32" height="32" alt="Logo" /> Run Komac (GitHub Action) <a href="https://github.com/russellbanks/Komac"> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/komac-logo.svg" height="24px" style="vertical-align:bottom" alt="Komac logo" /> </a></h1>
 
 ![GitHub issues][github-issues-badge]
 ![GitHub release (latest by date)][github-release-badge]
