@@ -35,7 +35,9 @@ runs:
       id: check-java
       shell: bash
       run: |
-        if java -version 2>&1 | grep -q "${{ inputs.java-version }}"; then
+        java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+        java_major_version=$(echo "$java_version" | cut -d'.' -f1)
+        if [[ "$java_major_version" -eq "${{ inputs.java-version }}" ]]; then
           echo "Java ${{ inputs.java-version }} is already installed"
           echo "java_installed=true" >> $GITHUB_ENV
         else
