@@ -1,13 +1,11 @@
 <h1> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/github-actions-logo.png" width="32" height="32" alt="Logo" /> Run Komac (GitHub Action) <a href="https://github.com/russellbanks/Komac"> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/komac-logo.svg" height="24px" style="vertical-align:bottom" alt="Komac logo" /> </a></h1>
 
-[![GitHub issues][github-issues-badge]](https://github.com/michidk/run-komac/issues)
-[![GitHub release (latest by date)][github-release-badge]](https://github.com/michidk/run-komac/releases)
-[![GitHub Repo stars][github-repo-stars-badge]](https://github.com/michidk/run-komac/stargazers)
-[![GitHub][github-license-badge]](https://github.com/michidk/run-komac?tab=MIT-1-ov-file#readme)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/michidk/run-komac?logo=github)](https://github.com/michidk/run-komac/releases)
+[![GitHub](https://img.shields.io/github/license/michidk/run-komac?logo=gnu)](https://github.com/michidk/run-komac?tab=MIT-1-ov-file#readme)
 
-This GitHub Action sets up Java, installs Komac, and then runs a user-specified command with Komac. It's designed to be efficient by checking if Java and Komac are already installed before attempting to install them.
+This GitHub Action installs Komac, and then runs a user-specified command with Komac.
 
-This action is used in the [winget-updater][winget-updater] GitHub action to automatically update WinGet packages.
+This action is used in the [winget-updater](https://github.com/michidk/winget-updater/) GitHub action to automatically update WinGet packages.
 
 
 ## 📖 Example Usage
@@ -21,19 +19,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Run Komac
-      uses: michidk/run-komac@v1
+      uses: michidk/run-komac@v2
       with:
         args: '--version'
 ```
 
 ## ⚒️ Configuration Options
 
-- `java-version`: Specifies which version of Java to use.
-  - **Required**: ❌
-  - **Default**: `17`
 - `komac-version`: Specifies which version of Komac to use.
   - **Required**: ❌
-  - **Default**: `1.11.0`
+  - **Default**: `latest`
 - `args`: The command to run with Komac.
   - **Required**: ✅
 - `custom-fork-owner`: Custom fork owner.
@@ -42,11 +37,3 @@ jobs:
   - **Required**: ❌
 - `custom-tool-url`: Custom tool URL.
   - **Required**: ❌
-- `reuse-draft-pr`: Reuse draft PR.
-  - **Required**: ❌
-
-[github-issues-badge]: https://img.shields.io/github/issues/michidk/run-komac?logo=target
-[github-release-badge]: https://img.shields.io/github/v/release/michidk/run-komac?logo=github
-[github-repo-stars-badge]: https://img.shields.io/github/stars/michidk/run-komac?logo=githubsponsors
-[github-license-badge]: https://img.shields.io/github/license/michidk/run-komac?logo=gnu
-[winget-updater]: https://github.com/michidk/winget-updater/

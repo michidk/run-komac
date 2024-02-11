@@ -1,90 +1,70 @@
 name: 'Run Komac'
-description: 'Sets up Java and runs Komac'
+description: 'Sets up and runs Komac with optional customizations'
 branding:
   color: 'blue'
   icon: 'upload-cloud'
+
 inputs:
-  java-version:
-    description: 'Java version to use'
-    required: false
-    default: '17'
   komac-version:
-    description: 'Which Komac version to use'
+    description: 'Komac version to use (default: latest)'
     required: false
-    default: '1.11.0'
+    default: 'latest'
   args:
-    description: 'The args to run Komac with'
+    description: 'Arguments to run Komac with'
     required: true
   custom-fork-owner:
-    description: 'Custom fork owner'
+    description: 'Specify a custom fork owner of Komac, if any'
     required: false
   custom-tool:
-    description: 'Custom tool'
+    description: 'Name of a custom tool to use with Komac'
     required: false
   custom-tool-url:
-    description: 'Custom tool URL'
-    required: false
-  reuse-draft-pr:
-    description: 'Reuse draft PR'
+    description: 'URL of the custom tool, if applicable'
     required: false
 
 runs:
   using: 'composite'
   steps:
-    - name: Check if correct Java version is installed
-      id: check-java
+    - name: Check for Komac Installation
+      id: check_komac
       shell: bash
       run: |
-        java_version=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-        java_major_version=$(echo "$java_version" | cut -d'.' -f1)
-        if [[ "$java_major_version" -eq "${{ inputs.java-version }}" ]]; then
-          echo "Java ${{ inputs.java-version }} is already installed"
-          echo "java_installed=true" >> $GITHUB_ENV
+        if komac --version &> /dev/null; then
+          echo "Komac is already installed."
+          echo "komac_installed=true" >> $GITHUB_OUTPUT
         else
-          echo "Java ${{ inputs.java-version }} is not installed"
-          echo "java_installed=false" >> $GITHUB_ENV
-        fi
-
-    - name: Setup Java
-      if: env.java_installed == 'false'
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: ${{ inputs.java-version }}
-
-    - name: Check if Komac is installed
-      id: check-komac
-      shell: bash
-      run: |
-        if [ -f "komac.jar" ]; then
-          echo "Komac is already installed"
-          echo "komac_installed=true" >> $GITHUB_ENV
-        else
-          echo "Komac is not installed"
-          echo "komac_installed=false" >> $GITHUB_ENV
+          echo "Komac is not installed."
+          echo "komac_installed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Install Komac
-      if: env.komac_installed == 'false'
+      if: steps.check_komac.outputs.komac_installed == 'false'
       shell: bash
-      run: wget https://github.com/russellbanks/Komac/releases/download/v${{ inputs.komac-version }}/Komac-${{ inputs.komac-version }}-all.jar -O komac.jar
+      run: |
+        version=${{ inputs.komac-version }}
+        if [ "$version" = "latest" ]; then
+          version=$(wget -qO- https://api.github.com/repos/russellbanks/Komac/releases/latest | grep 'tag_name' | cut -d'"' -f4 | sed 's/v//')
+        fi
+        wget https://github.com/russellbanks/Komac/releases/download/v$version/KomacPortable-linux-$version-x64.tar.gz -O komac.tar.gz
+        tar -xzf komac.tar.gz && rm komac.tar.gz
+        mkdir -p $HOME/.local/bin
+        mv KomacPortable-linux-$version-x64 $HOME/.local/bin/komac
+        chmod +x $HOME/.local/bin/komac
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
 
     - name: Set Custom Environment Variables
       shell: bash
       run: |
-        if [[ "${{ github.event.inputs.custom-fork-owner }}" != '' ]]; then
-          echo "KMC_FRK_OWNER=${{ github.event.inputs.custom-fork-owner }}" >> $GITHUB_ENV
+        if [[ -n "${{ inputs.custom-fork-owner }}" ]]; then
+          echo "KOMAC_FORK_OWNER=${{ inputs.custom-fork-owner }}" >> $GITHUB_ENV
         fi
-        if [[ "${{ github.event.inputs.custom-tool }}" != '' ]]; then
-          echo "KMC_CRTD_WITH=${{ github.event.inputs.custom-tool }}" >> $GITHUB_ENV
+        if [[ -n "${{ inputs.custom-tool }}" ]]; then
+          echo "KOMAC_CREATED_WITH=${{ inputs.custom-tool }}" >> $GITHUB_ENV
         fi
-        if [[ "${{ github.event.inputs.custom-tool-url }}" != '' ]]; then
-          echo "KMC_CRTD_WITH_URL=${{ github.event.inputs.custom-tool-url }}" >> $GITHUB_ENV
-        fi
-        if [[ "${{ github.event.inputs.reuse-draft-pr }}" != '' ]]; then
-          echo "KMC_FORCE_PUSH_PR=${{ github.event.inputs.reuse-draft-pr }}" >> $GITHUB_ENV
+        if [[ -n "${{ inputs.custom-tool-url }}" ]]; then
+          echo "KOMAC_CREATED_WITH_URL=${{ inputs.custom-tool-url }}" >> $GITHUB_ENV
         fi
 
     - name: Run Komac
       shell: bash
-      run: java -jar komac.jar ${{ inputs.args }}
+      run: $HOME/.local/bin/komac ${{ inputs.args }}
