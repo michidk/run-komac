@@ -45,10 +45,10 @@ runs:
         if [ "$version" = "latest" ]; then
           version=$(wget -qO- https://api.github.com/repos/russellbanks/Komac/releases/latest | grep 'tag_name' | cut -d'"' -f4 | sed 's/v//')
         fi
-        wget https://github.com/russellbanks/Komac/releases/download/v$version/KomacPortable-linux-$version-x64.tar.gz -O komac.tar.gz
+        wget https://github.com/russellbanks/Komac/releases/download/v$version/KomacPortable-linux-x64.tar.gz -O komac.tar.gz
         tar -xzf komac.tar.gz && rm komac.tar.gz
         mkdir -p $HOME/.local/bin
-        mv KomacPortable-linux-$version-x64 $HOME/.local/bin/komac
+        mv KomacPortable-linux-x64 $HOME/.local/bin/komac
         chmod +x $HOME/.local/bin/komac
         echo "$HOME/.local/bin" >> $GITHUB_PATH
 
