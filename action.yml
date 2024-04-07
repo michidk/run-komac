@@ -28,13 +28,13 @@ runs:
     - name: Check and Install OpenSSL
       shell: bash
       run: |
-        if ! openssl version; then
-          echo "OpenSSL is not installed. Installing..."
-          sudo apt-get update
-          sudo apt-get install openssl -y
-        else
-          echo "OpenSSL is already installed."
-        fi
+        wget http://www.openssl.org/source/openssl-1.0.0g.tar.gz
+        tar -xvzf openssl-1.0.0g.tar.gz
+        cd openssl-1.0.0g
+        ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
+        make
+        make install
+        sudo /usr/local/openssl/bin/openssl version
 
     - name: Check for Komac Installation
       id: check_komac
