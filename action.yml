@@ -37,6 +37,15 @@ runs:
           echo "komac_installed=false" >> $GITHUB_OUTPUT
         fi
 
+    - name: Check and install libssl
+      run: |
+        if ! dpkg -l | grep -qw libssl-dev; then
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev
+        else
+          echo "libssl already installed."
+        fi
+        
     - name: Install Komac
       if: steps.check_komac.outputs.komac_installed == 'false'
       shell: bash
