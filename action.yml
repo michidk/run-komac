@@ -28,8 +28,12 @@ runs:
     - name: Check and install libssl
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libssl-dev:1.0.0
+        if ! dpkg -l | grep -qw libssl-dev; then
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev
+        else
+          echo "libssl already installed."
+        fi
 
     - name: Check for Komac Installation
       id: check_komac
