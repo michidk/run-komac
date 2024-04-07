@@ -25,16 +25,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Check and Install OpenSSL
+    - name: Check and install libssl
       shell: bash
       run: |
-        wget http://www.openssl.org/source/openssl-1.0.0g.tar.gz
-        tar -xvzf openssl-1.0.0g.tar.gz
-        cd openssl-1.0.0g
-        ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
-        make
-        make install
-        sudo /usr/local/openssl/bin/openssl version
+        sudo apt-get update
+        sudo apt-get install -y libssl-dev
 
     - name: Check for Komac Installation
       id: check_komac
@@ -62,6 +57,7 @@ runs:
         mv KomacPortable-linux-x64 $HOME/.local/bin/komac
         chmod +x $HOME/.local/bin/komac
         echo "$HOME/.local/bin" >> $GITHUB_PATH
+        ldd $HOME/.local/bin/komac
 
     - name: Set Custom Environment Variables
       shell: bash
