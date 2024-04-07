@@ -29,7 +29,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y libssl-dev
+        sudo apt-get install -y libssl-dev openssl
 
     - name: Check for Komac Installation
       id: check_komac
