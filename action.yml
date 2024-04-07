@@ -25,14 +25,15 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Check and install libssl
+    - name: Check and Install OpenSSL
       shell: bash
       run: |
-        if ! dpkg -l | grep -qw libssl-dev; then
+        if ! openssl version; then
+          echo "OpenSSL is not installed. Installing..."
           sudo apt-get update
-          sudo apt-get install -y libssl-dev
+          sudo apt-get install openssl -y
         else
-          echo "libssl already installed."
+          echo "OpenSSL is already installed."
         fi
 
     - name: Check for Komac Installation
