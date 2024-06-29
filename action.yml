@@ -36,21 +36,19 @@ runs:
           echo "Komac is not installed."
           echo "komac_installed=false" >> $GITHUB_OUTPUT
         fi
+        
+    - name: Install binstall
+      if: steps.check_komac.outputs.komac_installed == 'false'
+      uses: cargo-bins/cargo-binstall@main
 
     - name: Install Komac
       if: steps.check_komac.outputs.komac_installed == 'false'
-      shell: bash
       run: |
-        version=${{ inputs.komac-version }}
-        if [ "$version" = "latest" ]; then
-          version=$(wget -qO- https://api.github.com/repos/russellbanks/Komac/releases/latest | grep 'tag_name' | cut -d'"' -f4 | sed 's/v//')
+        if [ "${{ inputs.komac-version }}" == 'latest' ]; then
+          cargo binstall komac -y
+        else
+          cargo binstall komac@${{ inputs.komac-version }} -y
         fi
-        wget https://github.com/russellbanks/Komac/releases/download/v$version/KomacPortable-linux-x64.tar.gz -O komac.tar.gz
-        tar -xzf komac.tar.gz && rm komac.tar.gz
-        mkdir -p $HOME/.local/bin
-        mv KomacPortable-linux-x64 $HOME/.local/bin/komac
-        chmod +x $HOME/.local/bin/komac
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
 
     - name: Set Custom Environment Variables
       shell: bash
@@ -67,4 +65,4 @@ runs:
 
     - name: Run Komac
       shell: bash
-      run: $HOME/.local/bin/komac ${{ inputs.args }}
+      run: komac ${{ inputs.args }}
