@@ -43,6 +43,7 @@ runs:
 
     - name: Install Komac
       if: steps.check_komac.outputs.komac_installed == 'false'
+      shell: bash
       run: |
         if [ "${{ inputs.komac-version }}" == 'latest' ]; then
           cargo binstall komac -y
