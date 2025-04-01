@@ -1,4 +1,4 @@
-<h1> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/github-actions-logo.png" width="32" height="32" alt="Logo" /> Run Komac (GitHub Action) <a href="https://github.com/russellbanks/Komac"> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/komac-logo.svg" height="24px" style="vertical-align:bottom" alt="Komac logo" /> </a></h1>
+<h1> <img src="https://github.com/vedantmgoyal9/winget-releaser/blob/main/.github/github-actions-logo.png" width="32" height="32" alt="Logo" /> Run Komac (GitHub Action) <a href="https://github.com/russellbanks/Komac"> <img src="https://rawcdn.githack.com/michidk/run-komac/86f4bad6701cb130ce85c4505ad39d9bbcd3d919/.github/images/komac-logo.svg" height="24px" style="vertical-align:bottom" alt="Komac logo" /> </a></h1>
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/michidk/run-komac?logo=github)](https://github.com/michidk/run-komac/releases)
 [![GitHub](https://img.shields.io/github/license/michidk/run-komac?logo=gnu)](https://github.com/michidk/run-komac?tab=MIT-1-ov-file#readme)
