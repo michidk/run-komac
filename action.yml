@@ -11,7 +11,8 @@ inputs:
     default: 'latest'
   args:
     description: 'Arguments to run Komac with'
-    required: true
+    required: false
+    default: ''
   custom-fork-owner:
     description: 'Specify a custom fork owner of Komac, if any'
     required: false
@@ -22,6 +23,10 @@ inputs:
     description: 'URL of the custom tool, if applicable'
     required: false
 
+outputs:
+  komac-exit-code:
+    description: 'Exit code returned by komac'
+
 runs:
   using: 'composite'
   steps:
@@ -29,31 +34,39 @@ runs:
       id: check_komac
       shell: bash
       run: |
-        if komac --version &> /dev/null; then
+        # fail fast and safer shell behavior
+        set -euo pipefail
+
+        # Prefer using command -v to detect whether komac is available in PATH
+        if command -v komac >/dev/null 2>&1; then
           echo "Komac is already installed."
           echo "komac_installed=true" >> $GITHUB_OUTPUT
         else
           echo "Komac is not installed."
           echo "komac_installed=false" >> $GITHUB_OUTPUT
         fi
-        
+
     - name: Install binstall
       if: steps.check_komac.outputs.komac_installed == 'false'
+      # Pin this to a released tag or commit instead of `main` for security.
+      # e.g., cargo-bins/cargo-binstall@vX.Y.Z or a commit SHA.
       uses: cargo-bins/cargo-binstall@main
 
     - name: Install Komac
       if: steps.check_komac.outputs.komac_installed == 'false'
       shell: bash
       run: |
-        if [ "${{ inputs.komac-version }}" == 'latest' ]; then
+        set -euo pipefail
+        if [ "${{ inputs.komac-version }}" = 'latest' ]; then
           cargo binstall komac -y
         else
-          cargo binstall komac@${{ inputs.komac-version }} -y
+          cargo binstall "komac@${{ inputs.komac-version }}" -y
         fi
 
     - name: Set Custom Environment Variables
       shell: bash
       run: |
+        set -euo pipefail
         if [[ -n "${{ inputs.custom-fork-owner }}" ]]; then
           echo "KOMAC_FORK_OWNER=${{ inputs.custom-fork-owner }}" >> $GITHUB_ENV
         fi
@@ -65,5 +78,23 @@ runs:
         fi
 
     - name: Run Komac
+      id: run_komac
       shell: bash
-      run: komac ${{ inputs.args }}
+      run: |
+        set -euo pipefail
+
+        # If args were provided, pass them; otherwise run with no args
+        if [[ -n "${{ inputs.args }}" ]]; then
+          # inputs.args is inserted by GitHub Actions — it will be passed as-is.
+          komac ${{ inputs.args }}
+        else
+          komac
+        fi
+        EXIT_CODE=$?
+        echo "komac_exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+
+    - name: Export komac exit code as action output
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "komac-exit-code=${{ steps.run_komac.outputs.komac_exit_code }}" >> $GITHUB_OUTPUT
