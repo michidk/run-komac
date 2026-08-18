@@ -46,9 +46,9 @@ runs:
       shell: bash
       run: |
         if [ "${{ inputs.komac-version }}" == 'latest' ]; then
-          cargo binstall komac -y
+          cargo binstall komac --locked -y
         else
-          cargo binstall komac@${{ inputs.komac-version }} -y
+          cargo binstall komac@${{ inputs.komac-version }} --locked -y
         fi
 
     - name: Set Custom Environment Variables

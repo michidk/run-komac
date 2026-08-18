@@ -3,11 +3,17 @@ on: [push]
 
 jobs:
   test:
-    name: Print Komac Version
+    name: Print Komac Version (${{ matrix.version }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version:
+          - latest
+          - 2.6.0
     steps:
     - uses: actions/checkout@v7
     - name: Run Komac
       uses: ./
       with:
+        komac-version: ${{ matrix.version }}
         args: '--version'
