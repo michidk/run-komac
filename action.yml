@@ -39,7 +39,7 @@ runs:
         
     - name: Install binstall
       if: steps.check_komac.outputs.komac_installed == 'false'
-      uses: cargo-bins/cargo-binstall@bbac61924f3b79d25b6ca556504442840fbde3e7 # main
+      uses: cargo-bins/cargo-binstall@c8c9583424e7077fbbae668cba1c1db11bbdb342 # main
 
     - name: Install Komac
       if: steps.check_komac.outputs.komac_installed == 'false'
